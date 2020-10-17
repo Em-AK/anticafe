@@ -11,6 +11,7 @@
     "html": "mkdir -p target && cp assets/index.html target/",
     "serve": "yarn html && http-server target/",
     "del": "rm -r target/*",
+    "deploy": "yarn html && yarn release",
     "build": "yarn del && yarn release && yarn html && yarn serve"
   },
   "author": "em-ak",
