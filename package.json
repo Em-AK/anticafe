@@ -1,0 +1,22 @@
+{
+  "name": "anticafe",
+  "version": "0.1.0",
+  "description": "Pay for time spent, in real time",
+  "main": "index.js",
+  "scripts": {
+    "watch": "shadow-cljs watch dapp",
+    "repl": "shadow-cljs cljs-repl dapp",
+    "compile": "shadow-cljs compile dapp",
+    "release": "shadow-cljs release dapp",
+    "html": "mkdir -p target && cp assets/index.html target/",
+    "serve": "yarn html && http-server target/",
+    "del": "rm -r target/*",
+    "build": "yarn del && yarn release && yarn html && yarn serve"
+  },
+  "author": "em-ak",
+  "license": "WTFPL",
+  "devDependencies": {
+    "http-server": "^0.12.3",
+    "shadow-cljs": "^2.11.5"
+  }
+}

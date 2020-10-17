@@ -1,0 +1,7 @@
+{:source-paths ["src"]
+ :dependencies [[cider/cider-nrepl "0.25.4"]]
+ :dev-http {8080 "target/"}
+ :builds {:dapp {:output-dir "target/"
+                 :asset-path "."
+                 :target :browser
+                 :modules {:main {:init-fn anticafe.web.main/main!}}}}}
