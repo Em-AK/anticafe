@@ -8,7 +8,7 @@
     "repl": "shadow-cljs cljs-repl dapp",
     "compile": "shadow-cljs compile dapp",
     "release": "shadow-cljs release dapp",
-    "html": "mkdir -p target && cp assets/index.html target/",
+    "html": "mkdir -p target && cp assets/* target/",
     "serve": "yarn html && http-server target/",
     "del": "rm -r target/*",
     "deploy": "yarn html && yarn release",
@@ -19,5 +19,9 @@
   "devDependencies": {
     "http-server": "^0.12.3",
     "shadow-cljs": "^2.11.5"
+  },
+  "dependencies": {
+    "react": "16.13.0",
+    "react-dom": "16.13.0"
   }
 }

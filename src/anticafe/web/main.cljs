@@ -1,13 +1,15 @@
 (ns anticafe.web.main
-  (:require [anticafe.lib :as lib]))
+  (:require
+    [reagent.dom :as rdom]))
 
-(def a 1)
-
-(defonce b 2)
+(defn home []
+  [:<>
+   [:h2 "Welcome to the decentralized Anti-café!"]
+   [:p "Relax, have fun and pay for the time spent in real time."]
+   [:a {:href "#"} "Get started"]])
 
 (defn main! []
-  (println "[main]: loading"))
+  (rdom/render [home] (js/document.getElementById "dapp")))
 
 (defn ^:dev/after-load reload! []
-  (println "[main] reloaded lib:" lib/c lib/d)
-  (println "[main] reloaded:" a b))
+  (main!))
