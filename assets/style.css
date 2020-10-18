@@ -1,3 +1,9 @@
+:root {
+  --readable-color: #504746;
+  --dark-color: #2e0a05;
+  --brand-color: 158, 97, 27
+}
+
 * {
   font-family: inherit;
   line-height: inherit;
@@ -8,7 +14,7 @@ html {
   font-family: Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 125%;
   line-height: 1.5;
-  color: #504746;
+  color: var(--readable-color);
 }
 
 body {
@@ -18,9 +24,37 @@ body {
 }
 
 h1, h2, strong {
-  color: #2e0a05;
+  color: var(--dark-color);
 }
 
 a {
-  color: #9e611b;
+  color: rgb(var(--brand-color));
+}
+
+button {
+  padding: 0.5em 1em;
+  color: #fff;
+  background: rgb(var(--brand-color));
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  filter: brightness(93%) contrast(120%);
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 5px 3px rgba(var(--brand-color), 0.42);
+}
+
+button:active {
+  filter: brightness(88%) contrast(120%);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  background: rgb(var(--brand-color));
+  filter: contrast(60%) brightness(120%);
 }
