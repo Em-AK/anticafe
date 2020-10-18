@@ -17,8 +17,8 @@ Run in development:
 
 ```bash
 yarn
-yarn html
-yarn watch
+yarn watch-assets
+yarn watch # in a separate terminal
 ```
 
 `shadow-cljs` will be installed in `node_modules/` when you run `yarn`.
