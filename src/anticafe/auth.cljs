@@ -51,8 +51,8 @@
   (fn [db _]
     (get-in db [:auth :network])))
 
-(defn- set-network [effects ethereum]
-  (assoc-in effects [:db :auth :network] (get networks (:chain-id ethereum))))
+(defn- set-network [effects chain-id]
+  (assoc-in effects [:db :auth :network] (get networks chain-id)))
 
 (rf/reg-sub
   :auth/valid-network?
@@ -60,18 +60,10 @@
   (fn [network]
     (= network :rinkeby)))
 
-(defn- listening? [db trigger]
-  (-> db
-      (get-in [:auth :listeners])
-      (contains? trigger)))
-
-(rf/reg-event-fx
+(rf/reg-event-db
   :auth/change-chain
-  [(rf/inject-cofx :auth/ethereum)]
-  (fn [{:keys [db ethereum]} _]
-    (-> {:db db}
-        (update-in [:db :auth :listeners] #(-> % (conj "chainChanged") set))
-        (set-network ethereum))))
+  (fn [db [_ chain-id]]
+    (-> {:db db} (set-network chain-id) :db)))
 
 (rf/reg-event-fx
   :auth/init
@@ -81,15 +73,14 @@
       :always
       (-> (assoc-in [:db :auth :metamask-installed?]
                     (boolean (:metamask? ethereum)))
-          (set-network ethereum))
+          (set-network (:chain-id ethereum)))
 
-      (and (:metamask? ethereum)
-           (not (listening? db "chainChanged")))
+      (:metamask? ethereum)
       (update :fx
               conj
               [:auth/listen-ethereum
                {:trigger "chainChanged"
-                :handler #(>evt [:auth/change-chain])}]
+                :handler #(>evt [:auth/change-chain %])}]
               [:auth/listen-ethereum
                {:trigger "accountsChanged"
                 :handler #(>evt [:auth/change-account %])}]))))
@@ -119,7 +110,7 @@
      :fx [[:auth/request-ethereum
            {:method "eth_requestAccounts"
             :on-success #(>evt [:auth/change-account %])
-            :on-error #(js/console.error :ERROR %)}]]}))
+            :on-error #(js/console.error "eth_requestAccounts: " %)}]]}))
 
 ;; Auth status
 
