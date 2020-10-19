@@ -1,7 +1,7 @@
 (ns anticafe.auth
   (:require
     [anticafe.utils :refer [>evt]]
-    [oops.core :refer [oget ocall!]]
+    [oops.core :refer [oget ocall! ocall]]
     [re-frame.core :as rf]))
 
 (def networks
@@ -30,6 +30,11 @@
   (fn [network]
     (= network :rinkeby)))
 
+(rf/reg-sub
+  :auth/account
+  (fn [db _]
+    (get-in db [:auth :accounts 0])))
+
 (rf/reg-cofx
   :auth/ethereum
   (fn [cofx _]
@@ -43,7 +48,7 @@
   (fn [{:keys [trigger handler]}]
     (-> js/window
         (oget "ethereum")
-        (ocall! "on" trigger handler))))
+        (ocall! "on" trigger (comp handler js->clj)))))
 
 (rf/reg-event-fx
   :auth/change-chain
@@ -73,3 +78,28 @@
       (update :fx conj [:auth/listen-ethereum
                         {:trigger "chainChanged"
                          :handler #(>evt [:auth/change-chain])}]))))
+
+;; Connect to user account
+
+(rf/reg-fx
+  :auth/request-ethereum
+  (fn [{:keys [method on-success on-error]}]
+    (-> js/window
+        (oget "ethereum")
+        (ocall "request" (clj->js {:method method}))
+        (.then (comp on-success js->clj))
+        (.catch on-error))))
+
+(rf/reg-event-db
+  :auth/change-account
+  (fn [db [_ accounts]]
+    (assoc-in db [:auth :accounts] accounts)))
+
+(rf/reg-event-fx
+  :auth/connect
+  (fn [{db :db}]
+    {:db db
+     :fx [[:auth/request-ethereum
+           {:method "eth_requestAccounts"
+            :on-success #(>evt [:auth/change-account %])
+            :on-error #(js/console.error :ERROR %)}]]}))
