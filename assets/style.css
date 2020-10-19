@@ -1,3 +1,9 @@
+:root {
+  --readable-color: #504746;
+  --dark-color: #2e0a05;
+  --brand-color: 158, 97, 27
+}
+
 * {
   font-family: inherit;
   line-height: inherit;
@@ -6,21 +12,92 @@
 
 html {
   font-family: Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 115%;
+  font-size: 125%;
   line-height: 1.5;
-  color: #504746;
+  color: var(--readable-color);
 }
 
 body {
   margin: 0 auto;
-  max-width: 50em;
-  padding: 2em 1em;
+  max-width: 40em;
+}
+
+html, body, #dapp {
+  height: 100%;
+}
+
+header, main, footer {
+  padding: 1em;
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+footer > a {
+  margin: 0.4em;
+}
+
+#dapp {
+  display: flex;
+  flex-direction: column;
+}
+
+#dapp > .content {
+  flex: 1 0 auto;
+}
+
+#dapp > footer {
+  flex-shrink: 0;
 }
 
 h1, h2, strong {
-  color: #2e0a05;
+  color: var(--dark-color);
 }
 
 a {
-  color: #9e611b;
+  color: rgb(var(--brand-color));
+}
+
+button {
+  padding: 0.5em 1em;
+  color: #fff;
+  background: rgb(var(--brand-color));
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  filter: brightness(93%) contrast(120%);
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 5px 3px rgba(var(--brand-color), 0.42);
+}
+
+button:active {
+  filter: brightness(88%) contrast(120%);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  background: rgb(var(--brand-color));
+  filter: contrast(60%) brightness(120%);
+}
+
+.dot {
+  height: 0.7em;
+  width: 0.7em;
+  margin-right: 0.3em;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.green {
+  background: chartreuse; /* like pastis but better */
 }
