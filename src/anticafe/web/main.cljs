@@ -14,13 +14,15 @@
 
 (defn- my-network [network]
   (when network
-    [:p "You are on network "
+    [:p "On network "
      [:strong (cstr/capitalize (name network))]]))
 
 (defn- connect-button [{:keys [status address on-connect]}]
   [:div
    (case status
-     :connected        [:p "Connected with account " [:strong [:code address]]]
+     :connected        [:p
+                        [:span.dot.green]
+                        "Connected with account " [:strong [:code address]]]
      :please-connect   [:button {:on-click on-connect} "Connect"]
      :wrong-network    [:p "Please switch your wallet to the "
                         [:strong "Rinkeby Test Network."]]
