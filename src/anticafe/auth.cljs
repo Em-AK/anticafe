@@ -65,6 +65,8 @@
   (fn [db [_ chain-id]]
     (-> {:db db} (set-network chain-id) :db)))
 
+;; Auth initialization
+
 (rf/reg-event-fx
   :auth/init
   [(rf/inject-cofx :auth/ethereum)]
@@ -78,6 +80,10 @@
       (:metamask? ethereum)
       (update :fx
               conj
+              [:auth/request-ethereum
+               {:method "eth_accounts"
+                :on-success #(>evt [:auth/change-account %])
+                :on-error #(js/console.error "eth_accounts: " %)}]
               [:auth/listen-ethereum
                {:trigger "chainChanged"
                 :handler #(>evt [:auth/change-chain %])}]
