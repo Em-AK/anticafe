@@ -1,6 +1,6 @@
 (ns anticafe.auth
   (:require
-    [anticafe.utils :refer [>evt]]
+    [anticafe.utils :as utils :refer [>evt]]
     [oops.core :refer [oget ocall! ocall]]
     [re-frame.core :as rf]))
 
@@ -95,6 +95,12 @@
   :auth/account
   (fn [db _]
     (get-in db [:auth :accounts 0])))
+
+(rf/reg-sub
+  :auth/short-address
+  :<- [:auth/account]
+  (fn [address]
+    (utils/shorten address)))
 
 (rf/reg-event-db
   :auth/change-account
