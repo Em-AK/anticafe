@@ -85,9 +85,14 @@
 
       (and (:metamask? ethereum)
            (not (listening? db "chainChanged")))
-      (update :fx conj [:auth/listen-ethereum
-                        {:trigger "chainChanged"
-                         :handler #(>evt [:auth/change-chain])}]))))
+      (update :fx
+              conj
+              [:auth/listen-ethereum
+               {:trigger "chainChanged"
+                :handler #(>evt [:auth/change-chain])}]
+              [:auth/listen-ethereum
+               {:trigger "accountsChanged"
+                :handler #(>evt [:auth/change-account %])}]))))
 
 ;; User account
 
