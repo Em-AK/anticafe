@@ -11,28 +11,20 @@
        "..."
        (cstr/join (take-last 4 address))))
 
-(defn- connect-button
-  [{:keys [account on-connect valid-network? metamask-installed?]}]
+(defn- connect-button [{:keys [status account on-connect]}]
   [:div
-   (cond
-     (and account valid-network?)
-     [:div "Connected with account "
-      [:strong [:code (shorten account)]]]
-
-     (and metamask-installed? valid-network?)
-     [:button {:on-click on-connect} "Connect"]
-
-     metamask-installed?
-     [:p "Please switch your wallet to the "
-      [:strong "Rinkeby Test Network."]]
-
-     :else
-     [:p "To get started "
-      [:strong
-       [:a {:href "https://metamask.io/download.html"
-            :target :_blank
-            :rel :noopener}
-        "Install MetaMask"]]])])
+   (case status
+     :connected        [:p "Connected with account "
+                        [:strong [:code (shorten account)]]]
+     :please-connect   [:button {:on-click on-connect} "Connect"]
+     :wrong-network    [:p "Please switch your wallet to the "
+                        [:strong "Rinkeby Test Network."]]
+     :install-metamask [:p "To get started "
+                        [:strong
+                         [:a {:href "https://metamask.io/download.html"
+                              :target :_blank
+                              :rel :noopener}
+                          "Install MetaMask"]]])])
 
 (defn- my-network [network]
   (when network
@@ -44,9 +36,8 @@
    [:h2 "Welcome to the decentralized Anti-café!"]
    [:em "Relax, have fun and pay for the time spent " [:strong "in real time."]]
    [my-network (<sub [:auth/network])]
-   [connect-button {:account (<sub [:auth/account])
-                    :valid-network? (<sub [:auth/valid-network?])
-                    :metamask-installed? (<sub [:auth/metamask-installed?])
+   [connect-button {:status (<sub [:auth/status])
+                    :account (<sub [:auth/account])
                     :on-connect #(>evt [:auth/connect])}]])
 
 (defn ^:dev/after-load render! []

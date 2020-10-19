@@ -109,3 +109,19 @@
            {:method "eth_requestAccounts"
             :on-success #(>evt [:auth/change-account %])
             :on-error #(js/console.error :ERROR %)}]]}))
+
+;; Auth status
+
+(rf/reg-sub
+  :auth/status
+  :<- [:auth/account]
+  :<- [:auth/valid-network?]
+  :<- [:auth/metamask-installed?]
+  (fn [[account
+        valid-network?
+        metamask-installed?] _]
+    (cond
+      (and account valid-network?) :connected
+      valid-network?               :please-connect
+      metamask-installed?          :wrong-network
+      :else                        :install-metamask)))
