@@ -15,18 +15,16 @@
   [{:keys [account on-connect valid-network? metamask-installed?]}]
   [:div
    (cond
-     (and metamask-installed?
-          (not valid-network?))
-     [:p "Please switch your wallet to the "
-      [:strong "Rinkeby Test Network."]]
-
-     account
+     (and account valid-network?)
      [:div "Connected with account "
       [:strong [:code (shorten account)]]]
 
-     (and metamask-installed?
-          valid-network?)
+     (and metamask-installed? valid-network?)
      [:button {:on-click on-connect} "Connect"]
+
+     metamask-installed?
+     [:p "Please switch your wallet to the "
+      [:strong "Rinkeby Test Network."]]
 
      :else
      [:p "To get started "
