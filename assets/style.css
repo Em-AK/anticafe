@@ -20,7 +20,37 @@ html {
 body {
   margin: 0 auto;
   max-width: 40em;
+}
+
+html, body, #dapp {
+  height: 100%;
+}
+
+header, main, footer {
   padding: 1em;
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+footer > a {
+  margin: 0.4em;
+}
+
+#dapp {
+  display: flex;
+  flex-direction: column;
+}
+
+#dapp > .content {
+  flex: 1 0 auto;
+}
+
+#dapp > footer {
+  flex-shrink: 0;
 }
 
 h1, h2, strong {
