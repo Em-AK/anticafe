@@ -11,21 +11,22 @@
        "..."
        (cstr/join (take-last 4 address))))
 
-(defn- connect-button []
+(defn- connect-button
+  [{:keys [account on-connect valid-network? metamask-installed?]}]
   [:div
    (cond
-     (and (<sub [:auth/metamask-installed?])
-          (not (<sub [:auth/valid-network?])))
+     (and metamask-installed?
+          (not valid-network?))
      [:p "Please switch your wallet to the "
       [:strong "Rinkeby Test Network."]]
 
-     (<sub [:auth/account])
+     account
      [:div "Connected with account "
-      [:strong [:code (shorten (<sub [:auth/account]))]]]
+      [:strong [:code (shorten account)]]]
 
-     (and (<sub [:auth/metamask-installed?])
-          (<sub [:auth/valid-network?]))
-     [:button {:on-click #(>evt [:auth/connect])} "Connect"]
+     (and metamask-installed?
+          valid-network?)
+     [:button {:on-click on-connect} "Connect"]
 
      :else
      [:p "To get started "
@@ -45,7 +46,10 @@
    [:h2 "Welcome to the decentralized Anti-café!"]
    [:em "Relax, have fun and pay for the time spent " [:strong "in real time."]]
    [my-network (<sub [:auth/network])]
-   [connect-button]])
+   [connect-button {:account (<sub [:auth/account])
+                    :valid-network? (<sub [:auth/valid-network?])
+                    :metamask-installed? (<sub [:auth/metamask-installed?])
+                    :on-connect #(>evt [:auth/connect])}]])
 
 (defn ^:dev/after-load render! []
   (rdom/render [home]
